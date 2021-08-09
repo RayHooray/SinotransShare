@@ -26,7 +26,11 @@
 
 ---
 
-### 数字（number）
+### 相同
+
+---
+
+#### 数字（number）
 
   与 JavaScript 一样， TypeScript 里的所有数字都是浮点数。
 
@@ -39,15 +43,15 @@
   let octalLiteral: number = 0o744; // 八进制
   ```
 
-### 布尔（boolean）
+#### 布尔（boolean）
 
   最基本的数据类型就是简单的 true/false 值
-  
+
   ```ts
   let isDone: boolean = false;
   ```
 
-### 字符串（string）
+#### 字符串（string）
 
   表示文本数据类型，可以使用双引号或单引号表示字符串。
 
@@ -68,7 +72,40 @@
   I'll be ${ age + 1 } years old next month.`;
   ```
 
-### 数组
+#### null 和 undefined
+
+* undefined 和 null 两者各自有自己的类型分别叫做 undefined 和 null；
+* 默认情况下 null 和 undefined 是所有类型的子类型；
+
+  ```ts
+  let nun: number
+
+  num = undefined
+
+  num = null
+  ```
+
+* 当指定了 --strictNullChecks 标记，null 和undefined 只能赋值给 void 或他们本身
+* 鼓励尽可能的使用 --strictNullChecks
+
+#### Object
+
+* 表示的事非原始类型，即除了 number、string、boolean、symbol、null、undefined 之外的类型。
+* 使用 object 类型，可以更好的表示 Object.create 这样的 API
+
+```ts
+delare function create(obj: object | null)
+
+create({ prop: 0 }); // OK
+create(null); // OK
+
+create(42); // Error
+create("string"); // Error
+create(false); // Error
+create(undefined); // Error
+```
+
+#### 数组
 
   有两种方式可以定义数组：
 
@@ -81,12 +118,16 @@
 
 * 第二种方式是使用数组泛型，Array<元素类型>：
 
-```ts
-let list: Array<number> = [1, 2, 3];
-let arr: Array<number | string | boolean> = [1, '2', true]
-```
+    ```ts
+    let list: Array<number> = [1, 2, 3];
+    let arr: Array<number | string | boolean> = [1, '2', true]
+    ```
 
-### 元组 Tuple
+### 不同
+
+---
+
+#### 元组 Tuple
 
 元组类型表示已知元素数量和类型（甚至是顺序）的**数组**，各元素的类型不必相同。 比如，你可以定义一对值分别为 string 和 number 类型的元组。
 
@@ -98,7 +139,7 @@ x = ['hello', 10]
 x = [10, 'hello']; // 检查类型错误
 ```
 
-### 枚举（enum）
+#### 枚举（enum）
 
 枚举类型可以为一组数值赋予友好的名字
 
@@ -109,14 +150,21 @@ let c: Color = Color.Green;
 
 默认情况下是从 0 开始
 
-### any
+#### any
 
-### void
+#### never
 
-### null 和 undefined
+#### void
 
-### never
+#### 断言类型
 
-### Object
+## TS 项目构成
 
-### 断言类型
+---
+
+### 编译配置文件
+
+#### tsconfig.json
+
+* 告诉 TypeScript 哪些文件需要被编译，哪些文件不需要编译
+* 编辑过程中需要使用到的信息
