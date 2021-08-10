@@ -152,11 +152,171 @@ let c: Color = Color.Green;
 
 #### any
 
+* any 在 TS 中占有特殊的地位
+* 它会使 TS 将类型检查关闭，当使用 any 时，基本上是在告诉 TS 不要进行任何类型检查
+* 在类型系统中，any 能兼容任何类型，也能赋值给其他任何类型
+
+```ts
+let power: any
+
+// 可被赋值任何类型
+power = 123
+power = '123'
+
+// 可以兼容任何类型
+let num: number
+
+num = power
+power = num
+```
+
 #### never
+
+* 表示的是那些永不存在的值的类型，例如：
+  * 抛出异常
+  * 根本不会有返回值的函数表达式或箭头函数表达式的返回值类型
+  * 永不为真
+* 是任何类型的子类型，也可以赋值给任何类型
+* 没有类型是 never 的子类型或可以赋值给 never 类型（除了 never 类型自身）
+
+```ts
+// 返回 never 类型的函数必须存在无法达到的终点
+function error(message: string): never {
+  throw new Error(message)
+}
+
+// 类型推导成 never 类型
+function fail() {
+  return error('failed')
+}
+
+function infiniteLoop(): never {
+  while(true) {}
+}
+// 
+```
 
 #### void
 
+表示一个函数没有任何的返回值
+
+```ts
+function log(message: string): void {
+  console.log(message)
+}
+```
+
 #### 断言类型
+
+* 主要用于类型转换，但不进行特殊的数据检查和解构
+* 对运行并没有影响，只是在编译过程中 TS 认为已经进行了必须的检查
+* 书写方法：
+  * 尖括号
+
+    ```ts
+    let someValue: any = 'this is a string'
+    let stringLength:number = (<string>someValue).length
+    ```
+
+  * as
+
+    ```ts
+    let someValue: any = 'this is a string'
+    let stringLength:number = (someValue as string).length
+    ```
+
+## 接口
+
+---
+
+接口的作用为类型命名、为代码或第三方代码定义契约。
+
+### 接口是如何工作的
+
+接口可以理解成一段描述，描述了一个参数该有什么，是对一个参数或变量的一种约束。
+
+```ts
+interface LabelValue {
+  lable: string
+  value?: string
+}
+
+function printLabel(labelObj: {label: LabelValue}): void {
+  console.log(labelObj.label)
+  if(labelObj.value) {
+    console.log(labelObj.value)
+  }
+}
+
+let myObj = { size: 10, label: 'size 10 object' }
+
+printLabel(myObj)
+```
+
+### 接口定义的数据类型
+
+* 性质上分
+  * 一般属性
+  * 可选属性
+  * 只读属性
+
+  ```ts
+  interface Config {
+    color: string
+    width?: number
+    readonly x: number
+    readonly y: number
+  }
+  ```
+
+* 额外属性检查
+  * 在某些情况下，会出现于接口类型不相符的属性名出现，在一定义的接口中会出现找不
+
+  ```ts
+  interface 
+  ```
+
+* 类型上分
+  * 函数类型
+
+  ```ts
+  interface Func {
+    (source: string, subString: string): boolean
+  }
+  ```
+
+  * 可索引的类型
+    * 数字索引
+
+    ```ts
+    interface MyArray<T> {
+      [index: number]: T
+      length: number
+      name: T
+    }
+    ```
+
+    * 字符串索引
+
+    ```ts
+    interface Dictionary<T> {
+      [index: string]: T
+      length: number
+      name: T
+    }
+    ```
+
+    * 如果对象要同时支持两种索引类型，那么必须保证字符串索引对应值的类型是数字索引对应值的类型的基础类。
+      * 因为在 JavaScript 的实现中，当我们以一个数字作为 key 访问对象属性时，JavaScript 会首先将该数字转变成字符串形式，再进行属性读取。
+
+  * 类类型
+  * 混合类型
+
+## 类
+
+
+
+## 函数
 
 ## TS 项目构成
 
