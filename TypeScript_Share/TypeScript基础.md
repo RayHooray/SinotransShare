@@ -22,6 +22,11 @@
   num = 'hello world' // Error: Type 'string' is not assignable to type 'number'.
   ```
 
+## 调试
+
+* 建议在本地下载 <code>ts-node typescript @types/node</code>
+* VSCode 装载 Code Runner 插件
+
 ## TypeScript 基础数据类型
 
 ---
@@ -270,10 +275,14 @@ printLabel(myObj)
   ```
 
 * 额外属性检查
-  * 在某些情况下，会出现于接口类型不相符的属性名出现，在一定义的接口中会出现找不
+  * 在检查或预见所定义属性意外的属性 key 的类型和 value 类型
 
   ```ts
-  interface 
+  interface SquareConfig {
+    color?: string
+    width?: number
+    [propName: string]: any
+  }
   ```
 
 * 类型上分
@@ -306,10 +315,49 @@ printLabel(myObj)
     }
     ```
 
-    * 如果对象要同时支持两种索引类型，那么必须保证字符串索引对应值的类型是数字索引对应值的类型的基础类。
+    * 如果对象要同时支持两种索引类型，那么必须保证**字符串索引对应值的类型是数字索引对应值的类型的基础类**。
+      * 说人话就是**字符串值得类型必须是索引属性值得类型的基础（我觉得理解成子集更形象）**
       * 因为在 JavaScript 的实现中，当我们以一个数字作为 key 访问对象属性时，JavaScript 会首先将该数字转变成字符串形式，再进行属性读取。
 
   * 类类型
+    * 实现接口：TS 通过接口来强制一个类去实现某种约定
+    * class 类通过 implements 来实现接口约束
+    * 接口中的除去非可选属性和扩展属性都需要实现，类也可以在实现接口过程中也可以添加自己的属性
+
+      ```ts
+      // 接口属性 currentTime 属性必须实现
+      interface ClockInterface {
+        currentTime: Date
+      }
+
+      class Clock implements ClockInterface {
+        currentTime: Date
+        constructor(h: number, m: number) {}
+      }
+      ```
+
+    * 类静态部分和实例部分的区别
+    * 静态类型部分，不在检查的范围内
+    * 想要检查静态类型，需要使用到一个辅助函数
+  
+      ````ts
+      interface TestContructor {
+        new (hour: number, munite: number): TestInterface
+      }
+
+      interface TestInterface {
+        test?(): any
+      }
+
+      function createTest(Ctor: TestContructor, hour: number, munite: number): TestInterface {
+        return new Ctor(hour, munite)
+      }
+
+      class Test implements TestInterface {
+        constructor(h: number, m: number) {}
+      }
+      ````
+
   * 混合类型
 
 ## 类
