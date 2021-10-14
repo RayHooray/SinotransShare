@@ -359,12 +359,140 @@ printLabel(myObj)
       ````
 
   * 混合类型
+    * 由于 JavaScript 的类型是动态灵活的，有时候需要指定多种类型
+    * 例如，一个对象，它既是对象也是函数，并且带有额外属性
+
+      ```ts
+      interface Counter {
+        (start: number): number // 指定函数的组成结构，返回类型
+        initNumber: number
+        reset():void // 方法而不是函数
+      }
+
+      function getCounter(): Counter {
+        // counter 既是对象也是函数
+        let counter = <Counter>function (start: number) { return start };
+        counter.initNumber = 123;
+        counter.reset = function () { console.log('this is reset') };
+        return counter;
+      }
+
+      let c = getCounter();
+      c(10);
+      c.reset();
+      c.initNumber = 5.0;
+
+      ```
 
 ## 类
 
+---
 
+### 创建并实现一个类
 
-## 函数
+``` ts
+// 创建类
+class Animal {
+  public name: string
+  public voice: number
+  protected protectedName: string
+  constructor(name: string, voice: string) {
+    this.name = name
+    this.voice = number
+  }
+  voice() {
+    return `${name}'s voice is ${this.voice}`
+  }
+}
+
+// 继承类
+
+class Corgi extends Animal {
+  selfName: string
+  readonly belognTo: string
+  private muster: string
+  // 错误，可以重写父类方法和属性，但是，必须和父类方法或属性的类型保持一直
+  // name: number
+  // voice() {
+  //   console.log(1111)
+  // }
+  // 正确重写方式
+  name: string
+  voice() {
+    return 'hello world'
+  }
+}
+
+```
+
+### 访问修饰符 public、private 和 protected 如何区分
+
+---
+
+|可访问性|public|protected|private|
+|---|---|---|---|
+|父类|true|true|true|
+|子类|true|true|false|
+|实例|true|false|false|
+
+```ts
+// 父类
+class Test {
+  public keyName1: stringunknown
+  private keyName2: number
+  protected keyName3: unknown
+}
+// 实例
+const test = new Test()
+test.keyName1 // ok
+test.keyName2 // 错误 属性“keyName2”为私有属性，只能在类“Test”中访问。
+test.keyName3 // 错误 属性“keyName3”受保护，只能在类“Test”及其子类中访问。
+
+// 子类
+class ChildTest extends Test {
+  constructor() {
+    super()
+    this.keyName1 // ok
+    this.keyName2 // 错误 属性“keyName2”为私有属性，只能在类“Test”中访问
+    this.keyName3 // ok
+  }
+}
+
+// 子类实例
+const child_test = new ChildTest()
+
+child_test.keyName1 // ok
+child_test.keyName2 // 错误 属性“keyName2”为私有属性，只能在类“Test”中访问。
+child_test.keyName3 // 错误 属性“keyName3”受保护，只能在类“Test”及其子类中访问。
+
+```
+
+### readonly 修饰符
+
+* 使用 readonly关键字将属性设置为只读的;
+* 只读属性必须在声明时或构造函数里被初始化
+
+```ts
+class Octopus {
+    readonly name: string;
+    readonly numberOfLegs: number = 8;
+    constructor (theName: string) {
+        this.name = theName;
+    }
+}
+let dad = new Octopus("Man with the 8 strong legs");
+dad.name = "Man with the 3-piece suit"; // 错误! name 是只读的.
+
+// 简化版
+class Octopus {
+    readonly numberOfLegs: number = 8;
+    constructor (readonly name: string) {
+        
+    }
+}
+```
+
+<!-- ## 函数
 
 ## TS 项目构成
 
@@ -375,4 +503,4 @@ printLabel(myObj)
 #### tsconfig.json
 
 * 告诉 TypeScript 哪些文件需要被编译，哪些文件不需要编译
-* 编辑过程中需要使用到的信息
+* 编辑过程中需要使用到的信息 -->
