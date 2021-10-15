@@ -134,7 +134,7 @@ create(undefined); // Error
 
 #### 元组 Tuple
 
-元组类型表示已知元素数量和类型（甚至是顺序）的**数组**，各元素的类型不必相同。 比如，你可以定义一对值分别为 string 和 number 类型的元组。
+元组类型表示已知元素数量和类型（甚至是顺序）的**数组**，各元素的类型不必相同。 比如，定义一对值分别为 string 和 number 类型的元组。
 
 ```ts
 let x: [string, number];
@@ -483,7 +483,7 @@ class Octopus {
 let dad = new Octopus("Man with the 8 strong legs");
 dad.name = "Man with the 3-piece suit"; // 错误! name 是只读的.
 
-// 简化版
+// 简化版 相对于 protected 和 public 也是一样的
 class Octopus {
     readonly numberOfLegs: number = 8;
     constructor (readonly name: string) {
@@ -491,6 +491,81 @@ class Octopus {
     }
 }
 ```
+
+### get 和 set（存取器）
+
+```ts
+// typescript 支持通过 getters/setters 来截取对对象成员的访问
+class TestGetAndSet {
+  isPrint: boolean
+  private printMsg: string
+
+  get printTest() {
+    return !!this.printMsg ?  this.printMsg : 'hola'
+  }
+  set printTest(value) {
+    if(isPrint) {
+      this.printMsg = value
+    } else {
+      console.log('hahahhahaha.........')
+    }
+  }
+}
+```
+
+<!-- ### 静态属性
+
+与 ES6 中的静态属性规则类似，只能通过类本身调用（不能用 **this**），可以被子类继承，但是不能被实例继承，详细：
+https://es6.ruanyifeng.com/#docs/class -->
+
+### 抽象类
+
+* 作为其他衍生类的基类，不能实例化，与接口不同的事，抽象类包含成员的实现细节
+
+* 与接口不同的是，抽象类中被 abstract 标记的方法和属性必须实现，而且自定义了抽象类没有的属性和方法，会报错（衍生类是抽象类的子集）
+
+* 接口是指定类型，有选择的实现接口内的属性和方法，可以自定义接口为指定的方法和属性（接口是衍生类的子集）
+
+```TS
+abstract class Department {
+
+    constructor(public name: string) {
+    }
+
+    printName(): void {
+        console.log('Department name: ' + this.name);
+    }
+
+    abstract printMeeting(): void; // 必须在派生类中实现
+}
+
+class AccountingDepartment extends Department {
+
+    constructor() {
+        super('Accounting and Auditing'); // 在派生类的构造函数中必须调用 super()
+    }
+
+    printMeeting(): void {
+        console.log('The Accounting Department meets each Monday at 10am.');
+    }
+
+    generateReports(): void {
+        console.log('Generating accounting reports...');
+    }
+}
+
+let department: Department; // 允许创建一个对抽象类型的引用
+department = new Department(); // 错误: 不能创建一个抽象类的实例
+department = new AccountingDepartment(); // 允许对一个抽象子类进行实例化和赋值
+department.printName();
+department.printMeeting();
+department.generateReports(); // 错误: 方法在声明的抽象类中不存在
+```
+
+
+
+
+
 
 <!-- ## 函数
 
